@@ -24,5 +24,12 @@ namespace CleanVentor.API.Controllers
             var moviesFromService = _service.GetAllProducts();
             return Ok(moviesFromService);
         }
+
+        [HttpPost]
+        public ActionResult<Products> PostProduct (Products products) 
+        {
+            var Product = _service.CreateProduct(products);
+            return Ok(products);
+        }
     }
 }

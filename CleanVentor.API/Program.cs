@@ -4,6 +4,8 @@ using CleanVentor.Infraestructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//register Configuration
+
 // Add services to the container.
 
 builder.Services.AddControllers();
