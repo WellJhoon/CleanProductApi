@@ -1,11 +1,7 @@
 ﻿using CleanVentor.Aplication.Interfaces;
 using CleanVentor.Domain.Models;
 using CleanVentor.Infraestructure.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanVentor.Infraestructure.Repository
 {
@@ -33,7 +29,28 @@ namespace CleanVentor.Infraestructure.Repository
         public List<Products> GetAllProducts()
         {
             return _productDbcontext.Productss.ToList();
-             
+        }
+
+        // Métodos faltantes que se agregaron nuevamente
+        public Products GetProductById(int id)
+        {
+            return _productDbcontext.Productss.FirstOrDefault(p => p.Id == id);
+        }
+
+        public void UpdateProduct(Products product)
+        {
+            _productDbcontext.Entry(product).State = EntityState.Modified;
+            _productDbcontext.SaveChanges();
+        }
+
+        public void DeleteProduct(int id)
+        {
+            var productToDelete = _productDbcontext.Productss.FirstOrDefault(p => p.Id == id);
+            if (productToDelete != null)
+            {
+                _productDbcontext.Productss.Remove(productToDelete);
+                _productDbcontext.SaveChanges();
+            }
         }
     }
 }

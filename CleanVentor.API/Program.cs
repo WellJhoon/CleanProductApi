@@ -1,10 +1,13 @@
 using CleanVentor.Aplication.Interfaces;
 using CleanVentor.Aplication.Service;
+using CleanVentor.Infraestructure.Context;
 using CleanVentor.Infraestructure.Repository;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //register Configuration
+ConfigurationManager configuration = builder.Configuration;
 
 // Add services to the container.
 
@@ -13,6 +16,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+//Add DbService
+builder.Services.AddDbContext<ProductDbcontext>(opt => opt.UseSqlServer(configuration.GetConnectionString("connection"),
+    b => b.MigrationsAssembly("CleanVentor.API")));
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 

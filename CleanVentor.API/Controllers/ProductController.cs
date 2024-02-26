@@ -25,6 +25,54 @@ namespace CleanVentor.API.Controllers
             return Ok(moviesFromService);
         }
 
+        //Get By Id:
+        [HttpGet("{id}")]
+        public ActionResult<Products> GetById(int id)
+        {
+            var product = _service.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+
+        //Update
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, Products product)
+        {
+            if (id != product.Id)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _service.UpdateProduct(product);
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+        //Delete
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var existingProduct = _service.GetProductById(id);
+            if (existingProduct == null)
+            {
+                return NotFound();
+            }
+
+            _service.DeleteProduct(id);
+            return NoContent();
+        }
+
+
         [HttpPost]
         public ActionResult<Products> PostProduct (Products products) 
         {
