@@ -5,20 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanVentor.Infraestructure.Repository
 {
+    // Repositorio para operaciones CRUD en la tabla de productos.
     public class ProductRepository : IProductRepository
     {
-        public static List<Products> products = new List<Products>()
-        {
-            new Products{Id = 1, Name = "Bebidas", Category = "Bebidas", Description = "Jugo de limon", Stock = 10, UnitPrice = 30},
-            new Products{Id = 2, Name = "Comida", Category = "Papas", Description = "Tuberculos", Stock = 20, UnitPrice = 2}
-        };
-        private readonly ProductDbcontext _productDbcontext;
+        private readonly ProductDbcontext _productDbcontext; // Contexto de la base de datos de productos.
 
+        // Constructor que recibe el contexto de la base de datos como argumento.
         public ProductRepository(ProductDbcontext productDbcontext)
         {
             _productDbcontext = productDbcontext;
         }
 
+        // Crea un nuevo producto en la base de datos.
         public Products CreateProduct(Products product)
         {
             _productDbcontext.Productss.Add(product);
@@ -26,23 +24,26 @@ namespace CleanVentor.Infraestructure.Repository
             return product;
         }
 
+        // Obtiene todos los productos de la base de datos.
         public List<Products> GetAllProducts()
         {
             return _productDbcontext.Productss.ToList();
         }
 
-        // Métodos faltantes que se agregaron nuevamente
+        // Obtiene un producto por su ID de la base de datos.
         public Products GetProductById(int id)
         {
             return _productDbcontext.Productss.FirstOrDefault(p => p.Id == id);
         }
 
+        // Actualiza un producto existente en la base de datos.
         public void UpdateProduct(Products product)
         {
             _productDbcontext.Entry(product).State = EntityState.Modified;
             _productDbcontext.SaveChanges();
         }
 
+        // Elimina un producto de la base de datos por su ID.
         public void DeleteProduct(int id)
         {
             var productToDelete = _productDbcontext.Productss.FirstOrDefault(p => p.Id == id);

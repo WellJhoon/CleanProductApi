@@ -3,8 +3,9 @@ using CleanVentor.Domain.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Dynamic;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CleanVentor.API.Controllers
 {
@@ -19,6 +20,15 @@ namespace CleanVentor.API.Controllers
             _service = service;
         }
 
+
+        [HttpPost]
+        public ActionResult<Products> PostProduct(Products products)
+        {
+            var Product = _service.CreateProduct(products); // Creates a new product by calling the service.
+            return Ok(products); // Returns the newly created product.
+        }
+
+        //Get all Users 
         [HttpGet]
         public ActionResult<List<Products>> Get()
         {
@@ -26,16 +36,16 @@ namespace CleanVentor.API.Controllers
             return Ok(productFromService);
         }
 
-        //Get By Id:
+        //Get User for Id
         [HttpGet("{id}")]
         public ActionResult<Products> GetById(int id)
         {
-            var product = _service.GetProductById(id);
+            var product = _service.GetProductById(id); //Get Product from service
             if (product == null)
             {
-                return NotFound();
+                return NotFound();//If Product is not Found make 404
             }
-            return Ok(product);
+            return Ok(product); //return product
         }
 
         //Update
@@ -44,19 +54,19 @@ namespace CleanVentor.API.Controllers
         {
             if (id != product.Id)
             {
-                return BadRequest();
+                return BadRequest(); //Return 404 if the product Id is does mach with Id
             }
 
             try
             {
-                _service.UpdateProduct(product);
+                _service.UpdateProduct(product); //Tries to update the product by calling the service.
             }
             catch (Exception)
             {
-                return NotFound();
+                return NotFound(); //Returns a 404 error if the product to update cannot be found.
             }
 
-            return NoContent();
+            return NoContent(); //Returns a 204 status to indicate the update was successful.
         }
 
         //Delete
@@ -66,19 +76,14 @@ namespace CleanVentor.API.Controllers
             var existingProduct = _service.GetProductById(id);
             if (existingProduct == null)
             {
-                return NotFound();
+                return NotFound(); // Returns a 404 error if the product to delete cannot be found.
             }
 
-            _service.DeleteProduct(id);
-            return NoContent();
+            _service.DeleteProduct(id); // Deletes the product by calling the service.
+            return NoContent();// Returns a 204 status
         }
 
 
-        [HttpPost]
-        public ActionResult<Products> PostProduct (Products products) 
-        {
-            var Product = _service.CreateProduct(products);
-            return Ok(products);
-        }
+     
     }
 }
