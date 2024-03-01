@@ -18,11 +18,12 @@ namespace CleanVentor.API.Controllers
         {
             _service = service;
         }
+
         [HttpGet]
         public ActionResult<List<Products>> Get()
         {
-            var moviesFromService = _service.GetAllProducts();
-            return Ok(moviesFromService);
+            var productFromService = _service.GetAllProducts();
+            return Ok(productFromService);
         }
 
         //Get By Id:
